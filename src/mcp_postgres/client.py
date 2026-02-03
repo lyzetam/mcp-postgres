@@ -2,16 +2,16 @@
 
 from __future__ import annotations
 
-import os
-
 import psycopg2
 import psycopg2.extras
+
+from mcp_postgres.config import get_settings
 
 
 class PostgresClient:
     """Manages psycopg2 connections to PostgreSQL.
 
-    Reads configuration from environment variables:
+    Reads configuration from environment variables or .env file via Pydantic Settings:
     - POSTGRES_URL (full DSN, takes priority)
     - POSTGRES_HOST, POSTGRES_PORT, POSTGRES_DATABASE, POSTGRES_USER, POSTGRES_PASSWORD
     """
@@ -25,12 +25,13 @@ class PostgresClient:
         user: str | None = None,
         password: str | None = None,
     ) -> None:
-        self.dsn = dsn or os.environ.get("POSTGRES_URL", "")
-        self.host = host or os.environ.get("POSTGRES_HOST", "localhost")
-        self.port = port or int(os.environ.get("POSTGRES_PORT", "5432"))
-        self.database = database or os.environ.get("POSTGRES_DATABASE", "personal")
-        self.user = user or os.environ.get("POSTGRES_USER", "postgres")
-        self.password = password or os.environ.get("POSTGRES_PASSWORD", "")
+        settings = get_settings()
+        self.dsn = dsn or settings.url
+        self.host = host or settings.host
+        self.port = port or settings.port
+        self.database = database or settings.database
+        self.user = user or settings.user
+        self.password = password or settings.password
 
     def connect(self):
         """Get a new psycopg2 connection."""
