@@ -2,6 +2,8 @@
 name = "mcp-postgres"
 version = "0.1.0"
 description = "PostgreSQL operations as Python library, LangChain tools, and MCP server"
+authors = [{name = "Landry Zetam"}]
+license = {text = "MIT"}
 requires-python = ">=3.10"
 dependencies = ["psycopg2-binary>=2.9.0", "pydantic-settings>=2.0"]
 
@@ -13,6 +15,10 @@ dev = [
     "pytest>=8.0",
     "pytest-cov",
 ]
+
+[project.urls]
+Homepage = "https://github.com/lyzetam/mcp-postgres"
+Repository = "https://github.com/lyzetam/mcp-postgres"
 
 [project.scripts]
 mcp-postgres = "mcp_postgres.server:main"
