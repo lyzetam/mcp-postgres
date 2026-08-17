@@ -78,16 +78,16 @@ def _require_read_only(query: str) -> None:
 # ============== QUERY TOOLS ==============
 
 @mcp.tool()
-async def run_query(query: str, params: Optional[str] = None) -> str:
+async def run_query(query: str, params: Optional[list] = None) -> str:
     """Execute a read-only SQL query (SELECT or WITH) and return results.
 
     Args:
         query: SQL query to execute — must be SELECT or WITH
-        params: Optional JSON array of parameters for parameterized queries
+        params: Optional array of parameters for parameterized queries ($1, $2, ...)
     """
     _require_read_only(query)
     pool = await get_pool()
-    param_list = json.loads(params) if params else []
+    param_list = params or []
 
     async with pool.acquire() as conn:
         rows = await conn.fetch(query, *param_list)
@@ -96,16 +96,16 @@ async def run_query(query: str, params: Optional[str] = None) -> str:
 
 
 @mcp.tool()
-async def run_query_one(query: str, params: Optional[str] = None) -> str:
+async def run_query_one(query: str, params: Optional[list] = None) -> str:
     """Execute a read-only SQL query (SELECT or WITH) and return a single row.
 
     Args:
         query: SQL query to execute — must be SELECT or WITH
-        params: Optional JSON array of parameters
+        params: Optional array of parameters ($1, $2, ...)
     """
     _require_read_only(query)
     pool = await get_pool()
-    param_list = json.loads(params) if params else []
+    param_list = params or []
 
     async with pool.acquire() as conn:
         row = await conn.fetchrow(query, *param_list)
