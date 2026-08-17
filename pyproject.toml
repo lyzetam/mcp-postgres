@@ -22,6 +22,7 @@ Repository = "https://github.com/lyzetam/mcp-postgres"
 
 [project.scripts]
 mcp-postgres = "mcp_postgres.server:main"
+mcp-postgres-readonly = "mcp_postgres.server_readonly:main"
 
 [build-system]
 requires = ["hatchling"]
